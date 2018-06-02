@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1.0" viewBox="0 0 236 96" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<metadata>
+<rdf:RDF>
+<cc:Work rdf:about="">
+<dc:format>image/svg+xml</dc:format>
+<dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+</cc:Work>
+</rdf:RDF>
+</metadata>
+<g fill-opacity=".11765" fill-rule="evenodd">
+<path d="m10 8l4-4h28l4 4-4 4h-28l-4-4z"/>
+<path d="m8 10l4 4v28l-4 4-4-4v-28l4-4z"/>
+<path d="m48 10l4 4v28l-4 4-4-4v-28l4-4z"/>
+<path d="m10 48l4-4h28l4 4-4 4h-28l-4-4z"/>
+<path d="m8 50l4 4v28l-4 4-4-4v-28l4-4z"/>
+<path d="m48 50l4 4v28l-4 4-4-4v-28l4-4z"/>
+<path d="m10 88l4-4h28l4 4-4 4h-28l-4-4z"/>
+<path d="m66 8l4-4h28l4 4-4 4h-28l-4-4z"/>
+<path d="m64 10l4 4v28l-4 4-4-4v-28l4-4z"/>
+<path d="m104 10l4 4v28l-4 4-4-4v-28l4-4z"/>
+<path d="m66 48l4-4h28l4 4-4 4h-28l-4-4z"/>
+<path d="m64 50l4 4v28l-4 4-4-4v-28l4-4z"/>
+<path d="m104 50l4 4v28l-4 4-4-4v-28l4-4z"/>
+<path d="m66 88l4-4h28l4 4-4 4h-28l-4-4z"/>
+<path d="m134 8l4-4h28l4 4-4 4h-28l-4-4z"/>
+<path d="m132 10l4 4v28l-4 4-4-4v-28l4-4z"/>
+<path d="m172 10l4 4v28l-4 4-4-4v-28l4-4z"/>
+<path d="m134 48l4-4h28l4 4-4 4h-28l-4-4z"/>
+<path d="m132 50l4 4v28l-4 4-4-4v-28l4-4z"/>
+<path d="m172 50l4 4v28l-4 4-4-4v-28l4-4z"/>
+<path d="m134 88l4-4h28l4 4-4 4h-28l-4-4z"/>
+<path d="m190 8l4-4h28l4 4-4 4h-28l-4-4z"/>
+<path d="m188 10l4 4v28l-4 4-4-4v-28l4-4z"/>
+<path d="m228 10l4 4v28l-4 4-4-4v-28l4-4z"/>
+<path d="m190 48l4-4h28l4 4-4 4h-28l-4-4z"/>
+<path d="m188 50l4 4v28l-4 4-4-4v-28l4-4z"/>
+<path d="m228 50l4 4v28l-4 4-4-4v-28l4-4z"/>
+<path d="m190 88l4-4h28l4 4-4 4h-28l-4-4z"/>
+</g>
+<g>
+<path d="m10 8l4-4h28l4 4-4 4h-28l-4-4z" fill="#141414" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1px"/>
+<path d="m8 10l4 4v28l-4 4-4-4v-28l4-4z" fill="#141414" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1px"/>
+<path d="m48 10l4 4v28l-4 4-4-4v-28l4-4z" fill="#141414" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1px"/>
+<path d="m10 48l4-4h28l4 4-4 4h-28l-4-4z" fill="#141414" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1px"/>
+<path d="m8 50l4 4v28l-4 4-4-4v-28l4-4z" fill="#141414" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1px"/>
+<path d="m48 50l4 4v28l-4 4-4-4v-28l4-4z" fill="#141414" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1px"/>
+<path d="m10 88l4-4h28l4 4-4 4h-28l-4-4z" fill="#141414" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1px"/>
+<path d="m66 8l4-4h28l4 4-4 4h-28l-4-4z" fill="#141414" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1px"/>
+<path d="m64 10l4 4v28l-4 4-4-4v-28l4-4z" fill="#141414" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1px"/>
+<path d="m104 10l4 4v28l-4 4-4-4v-28l4-4z" fill="#141414" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1px"/>
+<path d="m66 48l4-4h28l4 4-4 4h-28l-4-4z" fill="#141414" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1px"/>
+<path d="m64 50l4 4v28l-4 4-4-4v-28l4-4z" fill="#141414" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1px"/>
+<path d="m104 50l4 4v28l-4 4-4-4v-28l4-4z" fill="#141414" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1px"/>
+<path d="m66 88l4-4h28l4 4-4 4h-28l-4-4z" fill="#141414" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1px"/>
+<path transform="matrix(.98872 0 0 .98705 88.293 -3.5856)" d="m34 32a4 4 0 1 1 -8 0 4 4 0 1 1 8 0z" fill-opacity=".11765"/>
+<path transform="matrix(.98872 0 0 .98705 88.293 36.414)" d="m34 32a4 4 0 1 1 -8 0 4 4 0 1 1 8 0z" fill-opacity=".11765"/>
+<path transform="matrix(.98872 0 0 .98705 88.293 -3.5856)" d="m34 32a4 4 0 1 1 -8 0 4 4 0 1 1 8 0z" fill="#141414" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.0123"/>
+<path transform="matrix(.98872 0 0 .98705 88.293 36.414)" d="m34 32a4 4 0 1 1 -8 0 4 4 0 1 1 8 0z" fill="#141414" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.0123"/>
+<path d="m134 8l4-4h28l4 4-4 4h-28l-4-4z" fill="#141414" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1px"/>
+<path d="m132 10l4 4v28l-4 4-4-4v-28l4-4z" fill="#141414" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1px"/>
+<path d="m172 10l4 4v28l-4 4-4-4v-28l4-4z" fill="#141414" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1px"/>
+<path d="m134 48l4-4h28l4 4-4 4h-28l-4-4z" fill="#141414" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1px"/>
+<path d="m132 50l4 4v28l-4 4-4-4v-28l4-4z" fill="#141414" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1px"/>
+<path d="m172 50l4 4v28l-4 4-4-4v-28l4-4z" fill="#141414" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1px"/>
+<path d="m134 88l4-4h28l4 4-4 4h-28l-4-4z" fill="#141414" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1px"/>
+<path d="m190 8l4-4h28l4 4-4 4h-28l-4-4z" fill="#141414" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1px"/>
+<path d="m188 10l4 4v28l-4 4-4-4v-28l4-4z" fill="#141414" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1px"/>
+<path d="m228 10l4 4v28l-4 4-4-4v-28l4-4z" fill="#141414" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1px"/>
+<path d="m190 48l4-4h28l4 4-4 4h-28l-4-4z" fill="#141414" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1px"/>
+<path d="m188 50l4 4v28l-4 4-4-4v-28l4-4z" fill="#141414" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1px"/>
+<path d="m228 50l4 4v28l-4 4-4-4v-28l4-4z" fill="#141414" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1px"/>
+<path d="m190 88l4-4h28l4 4-4 4h-28l-4-4z" fill="#141414" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1px"/>
+</g>
+</svg>
