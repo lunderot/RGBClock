@@ -1,4 +1,5 @@
 #include <ESP8266WiFi.h>
+#include <WiFiClientSecure.h>
 
 #include "user.h"
 
@@ -16,12 +17,13 @@
 
 extern const char* ssid;
 extern const char* password;
-extern const char* gscript_url;
+extern const char* gscript;
 
-const char* host		=	"www.example.com";
-const int port			=	80;
+const char* host		=	"script.google.com";
+const char* host2		=	"script.googleusercontent.com";
+const int port			=	443;
 
-const char* httpGET		=	"GET / HTTP/1.1\r\n"
+const char* httpGET		=	"GET %s HTTP/1.1\r\n"
 							"Host: %s\r\n"
 							"Connection: close\r\n"
 							"\r\n";
@@ -50,14 +52,20 @@ void setup()
 	connectToWifi();
 }
 
+char request[256] = {0};
+char buf[1024] = {0};
+char path[512] = {0};
+
 void loop()
 {
-	WiFiClient client;
+	WiFiClientSecure client;
+	bool stop = false;
 	
-	char request[128] = {0};
-	char buf[1024] = {0};
+	memset(request, 0, 256);
+	memset(buf, 0, 1024);
+	memset(path, 0, 512);
 	
-	sprintf(request, httpGET, host);
+	sprintf(request, httpGET, gscript, host);
 	
 	if(client.connect(host, port))
 	{
@@ -66,14 +74,25 @@ void loop()
 		client.print(request);
 		
 		DPRINTLN("Response:");
-		while(client.connected())
+		while(client.connected() && !stop)
 		{
-			if(client.available())
+			int available = client.available();
+			if(available)
 			{
 				memset(buf, 0, 1024);
 				client.readBytesUntil('\n', buf, 1024);
 				DPRINTLN(buf);
+				
+				char* str = strstr(buf, host2);
+				if(str)
+				{
+					DPRINT("Found redirect: ");
+					strcpy(path, str + strlen(host2));
+					DPRINTLN(path);
+					stop = true;
+				}
 			}
+			delay(available == 0 ? 300 : 10);
 		}
 		client.stop();
 		DPRINTLN("Disconnected");
@@ -84,5 +103,5 @@ void loop()
 		client.stop();
 	}
 	
-	delay(20000);
+	delay(60000);
 }
