@@ -52,18 +52,18 @@ void setup()
 	connectToWifi();
 }
 
-char request[256] = {0};
-char buf[1024] = {0};
-char path[512] = {0};
+char request[400] = {0};
+char buf[512] = {0};
+char path[300] = {0};
 
 void loop()
 {
 	WiFiClientSecure client;
 	bool stop = false;
 	
-	memset(request, 0, 256);
-	memset(buf, 0, 1024);
-	memset(path, 0, 512);
+	memset(request, 0, 400);
+	memset(buf, 0, 512);
+	memset(path, 0, 300);
 	
 	sprintf(request, httpGET, gscript, host);
 	
@@ -79,8 +79,8 @@ void loop()
 			int available = client.available();
 			if(available)
 			{
-				memset(buf, 0, 1024);
-				client.readBytesUntil('\n', buf, 1024);
+				memset(buf, 0, 512);
+				client.readBytesUntil('\n', buf, 512);
 				DPRINTLN(buf);
 				
 				char* str = strstr(buf, host2);
@@ -100,6 +100,41 @@ void loop()
 	else
 	{
 		DPRINTLN("Failed to connect to: "); DPRINTLN(host);
+		client.stop();
+	}
+	
+	
+	memset(request, 0, 400);
+	memset(buf, 0, 512);
+	
+	sprintf(request, httpGET, path, host2);
+	
+	if(client.connect(host2, port))
+	{
+		DPRINTLN("Sending GET request...");
+		DPRINTLN(request);
+		client.print(request);
+		
+		DPRINTLN("Response:");
+		while(client.connected())
+		{
+			int available = client.available();
+			DPRINT("Available: ");
+			DPRINTLN(available);
+			if(available)
+			{
+				memset(buf, 0, 512);
+				client.readBytesUntil('\n', buf, 512);
+				DPRINTLN(buf);
+			}
+			delay(available == 0 ? 300 : 10);
+		}
+		client.stop();
+		DPRINTLN("Disconnected");
+	}
+	else
+	{
+		DPRINTLN("Failed to connect to: "); DPRINTLN(host2);
 		client.stop();
 	}
 	
