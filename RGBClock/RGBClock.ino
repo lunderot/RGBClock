@@ -46,26 +46,50 @@ void connectToWifi()
 	DPRINT("IP address: "); DPRINTLN(WiFi.localIP());
 }
 
-void setup()
+int exampleCallback(const char* data, void* user_data)
 {
-	DPRINT_SETUP(250000);
-	connectToWifi();
+	DPRINTLN("Inside example callback");
+	DPRINTLN(data);
+	return 0;
+}
+
+int printCallback(const char* data, void* user_data)
+{
+	DPRINTLN(data);
+	return 0;
+}
+
+int stage1(const char* data, void* user_data)
+{
+	DPRINTLN("Inside stage1 callback");
+	DPRINTLN(data);
+	
+	int returnValue = 0;
+	char* str = strstr(data, host2);
+	if(str)
+	{
+		DPRINT("Found redirect: ");
+		memset((char*)user_data, 0, 300);
+		strcpy((char*)user_data, str + strlen(host2));
+		DPRINTLN((char*)user_data);
+		returnValue = 1;
+	}
+	return returnValue;
 }
 
 char request[400] = {0};
 char buf[512] = {0};
-char path[300] = {0};
 
-void loop()
+//If callback returns 1, the connection is closed
+void makeRequest(const char* host, int port, const char* url, int (*callback)(const char*, void*), void* user_data)
 {
 	WiFiClientSecure client;
-	bool stop = false;
+	int stop = 0;
 	
 	memset(request, 0, 400);
 	memset(buf, 0, 512);
-	memset(path, 0, 300);
 	
-	sprintf(request, httpGET, gscript, host);
+	sprintf(request, httpGET, url, host);
 	
 	if(client.connect(host, port))
 	{
@@ -81,16 +105,7 @@ void loop()
 			{
 				memset(buf, 0, 512);
 				client.readBytesUntil('\n', buf, 512);
-				DPRINTLN(buf);
-				
-				char* str = strstr(buf, host2);
-				if(str)
-				{
-					DPRINT("Found redirect: ");
-					strcpy(path, str + strlen(host2));
-					DPRINTLN(path);
-					stop = true;
-				}
+				stop = callback(buf, user_data);
 			}
 			delay(available == 0 ? 300 : 10);
 		}
@@ -102,41 +117,29 @@ void loop()
 		DPRINTLN("Failed to connect to: "); DPRINTLN(host);
 		client.stop();
 	}
-	
-	
-	memset(request, 0, 400);
-	memset(buf, 0, 512);
-	
-	sprintf(request, httpGET, path, host2);
-	
-	if(client.connect(host2, port))
-	{
-		DPRINTLN("Sending GET request...");
-		DPRINTLN(request);
-		client.print(request);
-		
-		DPRINTLN("Response:");
-		while(client.connected())
-		{
-			int available = client.available();
-			DPRINT("Available: ");
-			DPRINTLN(available);
-			if(available)
-			{
-				memset(buf, 0, 512);
-				client.readBytesUntil('\n', buf, 512);
-				DPRINTLN(buf);
-			}
-			delay(available == 0 ? 300 : 10);
-		}
-		client.stop();
-		DPRINTLN("Disconnected");
-	}
-	else
-	{
-		DPRINTLN("Failed to connect to: "); DPRINTLN(host2);
-		client.stop();
-	}
-	
+}
+
+void setup()
+{
+	DPRINT_SETUP(250000);
+	connectToWifi();
+}
+
+char path[300] = {0};
+
+void loop()
+{
+	DPRINTLN("");
+	DPRINTLN("");
+	DPRINTLN("STAGE 1");
+	DPRINTLN("=======");
+	DPRINTLN("");
+	makeRequest(host, port, gscript, stage1, path);
+	DPRINTLN("");
+	DPRINTLN("");
+	DPRINTLN("STAGE 2");
+	DPRINTLN("=======");
+	DPRINTLN("");
+	makeRequest(host2, port, path, printCallback, NULL);
 	delay(60000);
 }
