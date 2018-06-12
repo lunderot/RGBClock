@@ -30,6 +30,7 @@ const char* httpGET		=	"GET %s HTTP/1.1\r\n"
 const int pixelPin		= 14;
 
 time_t currentTime;
+time_t alarm;
 
 void connectToWifi()
 {
@@ -82,14 +83,13 @@ int stage1(const char* data, void* user_data)
 
 int stage2(const char* data, void* user_data)
 {
-	//DPRINTLN("Inside stage2 callback");
-	//DPRINTLN(data);
-	if(data[0] == '|')
-	{
-		currentTime = atol(data+1);
-	}
-	//DPRINT("CurrentTime: ");
-	//DPRINTLN(currentTime);
+	DPRINTLN("Inside stage2 callback");
+	DPRINTLN(data);
+	sscanf(data, "|%lu %lu", &currentTime, &alarm);
+	DPRINT("CurrentTime: ");
+	DPRINTLN(currentTime);
+	DPRINT("Alarm: ");
+	DPRINTLN(alarm);
 	return 0;
 }
 
@@ -135,28 +135,41 @@ void makeRequest(const char* host, int port, const char* url, int (*callback)(co
 	}
 }
 
-Adafruit_NeoPixel strip = Adafruit_NeoPixel(7, pixelPin, NEO_GRB + NEO_KHZ800);
+void timer0_ISR(void)
+{
+	currentTime++;
+	struct tm* timeData = gmtime(&currentTime);
+	DPRINT("Time: ");
+	DPRINT(timeData->tm_hour);
+	DPRINT(":");
+	DPRINT(timeData->tm_min);
+	DPRINT(":");
+	DPRINTLN(timeData->tm_sec);
+	DPRINTLN("timer0_ISR");
+	timer0_write(ESP.getCycleCount() + 80000000L); // 80MHz == 1sec
+}
+
+Adafruit_NeoPixel strip = Adafruit_NeoPixel(7*4 +2, pixelPin, NEO_GRB + NEO_KHZ800);
 char path[300] = {0};
 
 void setup()
 {
 	DPRINT_SETUP(250000);
+	
+	
 	strip.begin();
 	strip.show();
 	connectToWifi();
-	
-	DPRINTLN("");
-	DPRINTLN("");
-	DPRINTLN("STAGE 1");
-	DPRINTLN("=======");
-	DPRINTLN("");
 	makeRequest(host, port, gscript, stage1, path);
-	DPRINTLN("");
-	DPRINTLN("");
-	DPRINTLN("STAGE 2");
-	DPRINTLN("=======");
-	DPRINTLN("");
 	makeRequest(host2, port, path, stage2, NULL);
+	
+	currentTime += 3600 * 2;
+	
+	noInterrupts();
+	timer0_isr_init();
+	timer0_attachInterrupt(timer0_ISR);
+	timer0_write(ESP.getCycleCount() + 80000000L); // 80MHz == 1sec
+	interrupts();
 }
 
 
@@ -165,29 +178,37 @@ void displayDigit(int number, int offset, uint32_t color, uint32_t off)
 	number %= 10;
 	for(int i=0;i<7;i++)
 	{
-		char a = digitmap[number];
-		char result = ((a << i) & 0b10000000) == 0b10000000;
+		char result = ((digitmap[number] << i) & 0b10000000) == 0b10000000;
 		strip.setPixelColor(i + offset, result ? color : off);
 	}
-	strip.show();
+}
+
+void displayNumber(int number, int offset, uint32_t color, uint32_t off)
+{
+	int i = 0;
+	while (number > 0)
+	{
+		int digit = number % 10;
+		displayDigit(digit, offset - i * 7, color, off);
+		number /= 10;
+		i++;
+	}
 }
 
 void loop()
 {
-	currentTime++;
-	
 	struct tm* timeData = gmtime(&currentTime);
 	
-	DPRINT("Time: ");
-	DPRINT(timeData->tm_hour);
-	DPRINT(":");
-	DPRINT(timeData->tm_min);
-	DPRINT(":");
-	DPRINTLN(timeData->tm_sec);
-	
-	uint32_t color = strip.Color(255, 64, 0);
+	uint32_t color = strip.Color(255, 0, 0);
 	uint32_t off = strip.Color(0, 0, 0);
 	
-	displayDigit(timeData->tm_sec, 0, color, off);
-	delay(1000);
+	displayNumber(timeData->tm_min, 7*3, color, off);
+	displayNumber(timeData->tm_hour, 7, color, off);
+	
+	uint32_t digitColor = timeData->tm_sec % 2 ? color : off;
+	strip.setPixelColor(7*4+0, digitColor);
+	strip.setPixelColor(7*4+1, digitColor);
+	
+	strip.show();
+	delay(100);
 }
