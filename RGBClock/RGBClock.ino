@@ -183,15 +183,11 @@ void displayDigit(int number, int offset, uint32_t color, uint32_t off)
 	}
 }
 
-void displayNumber(int number, int offset, uint32_t color, uint32_t off)
+void displayNumber(char* num, uint32_t color, uint32_t off)
 {
-	int i = 0;
-	while (number > 0)
+	for(int i=0;i<4;i++)
 	{
-		int digit = number % 10;
-		displayDigit(digit, offset - i * 7, color, off);
-		number /= 10;
-		i++;
+		displayDigit(num[i] - '0', i*7, color, off);
 	}
 }
 
@@ -202,8 +198,10 @@ void loop()
 	uint32_t color = strip.Color(255, 0, 0);
 	uint32_t off = strip.Color(0, 0, 0);
 	
-	displayNumber(timeData->tm_min, 7*3, color, off);
-	displayNumber(timeData->tm_hour, 7, color, off);
+	char disp[5] = {0};
+	
+	sprintf(disp, "%.2d%.2d", timeData->tm_hour, timeData->tm_min);
+	displayNumber(disp, color, off);
 	
 	uint32_t digitColor = timeData->tm_sec % 2 ? color : off;
 	strip.setPixelColor(7*4+0, digitColor);
