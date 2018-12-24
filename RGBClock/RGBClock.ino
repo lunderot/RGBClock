@@ -158,12 +158,11 @@ void setup()
 	
 	
 	strip.begin();
+	displayNumber("0000", 0x00000000, 0x00000000);
 	strip.show();
 	connectToWifi();
 	makeRequest(host, port, gscript, stage1, path);
 	makeRequest(host2, port, path, stage2, NULL);
-	
-	currentTime += 3600 * 2;
 	
 	noInterrupts();
 	timer0_isr_init();
