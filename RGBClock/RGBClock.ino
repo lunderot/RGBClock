@@ -29,8 +29,12 @@ const char* httpGET		=	"GET %s HTTP/1.1\r\n"
 							
 const int pixelPin		= 14;
 
-time_t currentTime;
-time_t alarm;
+time_t currentTime = 1;
+time_t alarm = 0;
+
+Adafruit_NeoPixel strip = Adafruit_NeoPixel(7*4 +2, pixelPin, NEO_GRB + NEO_KHZ800);
+char redirect_path[300] = {0};
+
 
 void connectToWifi()
 {
@@ -47,25 +51,13 @@ void connectToWifi()
 	
 	DPRINTLN("");
 	DPRINTLN("WiFi connected");
-	DPRINT("IP address: "); DPRINTLN(WiFi.localIP());
+	DPRINT("IP address: ");
+	DPRINTLN(WiFi.localIP());
 }
 
-int exampleCallback(const char* data, void* user_data)
+int find_redirect_path(const char* data, void* redirect_path)
 {
-	DPRINTLN("Inside example callback");
-	DPRINTLN(data);
-	return 0;
-}
-
-int printCallback(const char* data, void* user_data)
-{
-	DPRINTLN(data);
-	return 0;
-}
-
-int stage1(const char* data, void* user_data)
-{
-	//DPRINTLN("Inside stage1 callback");
+	//DPRINTLN("Inside find_redirect_path callback");
 	//DPRINTLN(data);
 	
 	int returnValue = 0;
@@ -73,17 +65,17 @@ int stage1(const char* data, void* user_data)
 	if(str)
 	{
 		//DPRINT("Found redirect: ");
-		memset((char*)user_data, 0, 300);
-		strcpy((char*)user_data, str + strlen(host2));
-		//DPRINTLN((char*)user_data);
+		memset((char*)redirect_path, 0, 300);
+		strcpy((char*)redirect_path, str + strlen(host2));
+		//DPRINTLN((char*)redirect_path);
 		returnValue = 1;
 	}
 	return returnValue;
 }
 
-int stage2(const char* data, void* user_data)
+int get_time(const char* data, void* user_data)
 {
-	DPRINTLN("Inside stage2 callback");
+	DPRINTLN("Inside get_time callback");
 	DPRINTLN(data);
 	sscanf(data, "|%lu %lu", &currentTime, &alarm);
 	DPRINT("CurrentTime: ");
@@ -93,17 +85,13 @@ int stage2(const char* data, void* user_data)
 	return 0;
 }
 
-char request[400] = {0};
-char buf[512] = {0};
-
 //If callback returns 1, the connection is closed
 void makeRequest(const char* host, int port, const char* url, int (*callback)(const char*, void*), void* user_data)
 {
 	WiFiClientSecure client;
 	int stop = 0;
-	
-	memset(request, 0, 400);
-	memset(buf, 0, 512);
+	char buf[512] = {0};
+	char request[400] = {0};
 	
 	sprintf(request, httpGET, url, host);
 	
@@ -137,6 +125,8 @@ void makeRequest(const char* host, int port, const char* url, int (*callback)(co
 
 void timer0_ISR(void)
 {
+	timer0_write(ESP.getCycleCount() + 80000000L); // 80MHz == 1sec
+
 	currentTime++;
 	struct tm* timeData = gmtime(&currentTime);
 	DPRINT("Time: ");
@@ -146,29 +136,37 @@ void timer0_ISR(void)
 	DPRINT(":");
 	DPRINTLN(timeData->tm_sec);
 	DPRINTLN("timer0_ISR");
-	timer0_write(ESP.getCycleCount() + 80000000L); // 80MHz == 1sec
-}
 
-Adafruit_NeoPixel strip = Adafruit_NeoPixel(7*4 +2, pixelPin, NEO_GRB + NEO_KHZ800);
-char path[300] = {0};
+	uint32_t color = strip.Color(255, 0, 0);
+	uint32_t off = strip.Color(0, 0, 0);
+	
+	char disp[5] = {0};
+	
+	sprintf(disp, "%.2d%.2d", timeData->tm_hour, timeData->tm_min);
+	displayNumber(disp, color, off);
+	
+	uint32_t digitColor = timeData->tm_sec % 2 ? color : off;
+	strip.setPixelColor(7*4+0, digitColor);
+	strip.setPixelColor(7*4+1, digitColor);
+	
+	strip.show();
+}
 
 void setup()
 {
 	DPRINT_SETUP(250000);
-	
-	
+
 	strip.begin();
-	displayNumber("0000", 0x00000000, 0x00000000);
-	strip.show();
-	connectToWifi();
-	makeRequest(host, port, gscript, stage1, path);
-	makeRequest(host2, port, path, stage2, NULL);
-	
+
 	noInterrupts();
 	timer0_isr_init();
 	timer0_attachInterrupt(timer0_ISR);
-	timer0_write(ESP.getCycleCount() + 80000000L); // 80MHz == 1sec
+	timer0_write(ESP.getCycleCount() + 80000000L);
 	interrupts();
+
+	connectToWifi();
+	makeRequest(host, port, gscript, find_redirect_path, redirect_path);
+	makeRequest(host2, port, redirect_path, get_time, NULL);
 }
 
 
@@ -192,20 +190,4 @@ void displayNumber(char* num, uint32_t color, uint32_t off)
 
 void loop()
 {
-	struct tm* timeData = gmtime(&currentTime);
-	
-	uint32_t color = strip.Color(255, 0, 0);
-	uint32_t off = strip.Color(0, 0, 0);
-	
-	char disp[5] = {0};
-	
-	sprintf(disp, "%.2d%.2d", timeData->tm_hour, timeData->tm_min);
-	displayNumber(disp, color, off);
-	
-	uint32_t digitColor = timeData->tm_sec % 2 ? color : off;
-	strip.setPixelColor(7*4+0, digitColor);
-	strip.setPixelColor(7*4+1, digitColor);
-	
-	strip.show();
-	delay(100);
 }
