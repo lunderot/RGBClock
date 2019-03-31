@@ -123,6 +123,12 @@ void makeRequest(const char* host, int port, const char* url, int (*callback)(co
 	}
 }
 
+void updateTime()
+{
+	makeRequest(host, port, gscript, find_redirect_path, redirect_path);
+	makeRequest(host2, port, redirect_path, get_time, NULL);
+}
+
 void timer0_ISR(void)
 {
 	timer0_write(ESP.getCycleCount() + 80000000L); // 80MHz == 1sec
@@ -165,8 +171,7 @@ void setup()
 	interrupts();
 
 	connectToWifi();
-	makeRequest(host, port, gscript, find_redirect_path, redirect_path);
-	makeRequest(host2, port, redirect_path, get_time, NULL);
+	updateTime();
 }
 
 
